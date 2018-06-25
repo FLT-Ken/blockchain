@@ -44,21 +44,28 @@ abi = [
 	}
 ]
 VotingContract = web3.eth.contract(abi);
-contractInstance = VotingContract.at('0xdee2bd7b778fe8f32ec8403ac50a688552875ec0');
+contractInstance = VotingContract.at('0x5ad26f1bee8d8a273fda64de3937e71ee4f85e9d');
 
 var address = web3.eth.accounts[0];
 
 function sendMessage() {
   let message = $("#message").val();
-  contractInstance.writeMessage(address, message, {from: address}, console.log);
+  contractInstance.writeMessage(address, message, {from: address}, function() {});
 }
 
-loop = () => {
-  let messages = contractInstance.getAllMessageByAccount.call(address, (e,result) => {
-    console.log(messages);
-    console.log(result);
+loop=() => {
+  contractInstance.getAllMessageByAccount.call(address, (e, result) => {
+    console.log("result: " + JSON.stringify(result));
+    let messages = null;
+    for(let message of result) {
+      if(messages == null) {
+        messages += message;
+      } else {
+        messages += ", " + message;
+      }
+    }
     $("#messageArea").html(messages);
   })
-  setTimeout(loop,5000);
+  setTimeout(loop, 5000);
 }
 loop()
