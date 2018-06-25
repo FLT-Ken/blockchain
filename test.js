@@ -56,9 +56,9 @@ function sendMessage() {
 loop=() => {
   contractInstance.getAllMessageByAccount.call(address, (e, result) => {
     console.log("result: " + JSON.stringify(result));
-    let messages = null;
+    let messages = '';
     for(let message of result) {
-      if(messages == null) {
+      if(messages == '') {
         messages += message;
       } else {
         messages += ", " + message;
